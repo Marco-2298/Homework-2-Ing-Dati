@@ -1,4 +1,4 @@
-package src.main.java.it.uniroma3;
+package it.uniroma3;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.KeywordAnalyzer;
@@ -16,14 +16,13 @@ import org.apache.lucene.store.FSDirectory;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 // Importiamo le costanti di percorso che abbiamo definito
-import static it.uniroma3.datamining.AppConstants.DATA_DIR;
-import static it.uniroma3.datamining.AppConstants.INDEX_DIR;
+import static it.uniroma3.AppConstants.DATA_DIR;
+import static it.uniroma3.AppConstants.INDEX_DIR;
 
 public class Indexer {
 
