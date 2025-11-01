@@ -166,10 +166,17 @@ public class Main {
 
                         // --- Documento per INDICE "NOME" ---
                         Document dn = new Document();
+
+                        // Pulisce il nome del file: toglie estensione e normalizza separatori
+                        String baseName = fileName.replaceFirst("\\.[^.]+$", "");    // rimuove .txt
+                        String normName = baseName.replaceAll("[._-]+", " ");         // sostituisce . _ - con spazio
+
                         // Campo ricercabile sul nome (analizzato): supporta parole e "phrase query"
-                        dn.add(new TextField("nomefile", fileName, Field.Store.YES));
+                        dn.add(new TextField("nomefile", normName, Field.Store.YES));
+
                         // Campo path per stampa
                         dn.add(new StoredField("path", absPath));
+
                         wNome.addDocument(dn);
                         countNome++;
 
