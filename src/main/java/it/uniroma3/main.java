@@ -27,19 +27,6 @@ import java.time.Instant;
 import java.util.Locale;
 import java.util.Scanner;
 
-/**
- * Unico file con:
- *  - indicizzazione su DUE INDICI separati (nome e contenuto)
- *  - ricerca da console con sintassi: "nome ..." oppure "contenuto ..."
- *
- * Dipendenze (Maven):
- *   lucene-core, lucene-analyzers-common, lucene-queryparser (>= 9.x)
- *
- * Struttura progetto:
- *   data/               <-- 20 .txt (titolo = nome del file, testo = contenuto)
- *   index_nome/         <-- indice per i nomi (creato dal programma)
- *   index_contenuto/    <-- indice per i contenuti (creato dal programma)
- */
 public class Main {
 
     // Cartelle predefinite (relative alla root del progetto)
@@ -63,7 +50,7 @@ public class Main {
                     == Ricerca ==
                     Scrivi una query che inizi con:
                       - nome <termini...>            es: nome superclassico
-                      - contenuto <termini...>       es: contenuto "amore e strada"
+                      - contenuto <termini...>       es: contenuto "fermar la pioggia"
                     Digita 'exit' per uscire.
                     """);
 
@@ -84,7 +71,6 @@ public class Main {
 
                     for (int i = 0; i < Math.min(10, hits.scoreDocs.length); i++) {
                         ScoreDoc sd = hits.scoreDocs[i];
-                        // ⚠️ Nessun metodo deprecato: uso StoredFields API
                         Document d = result.doc(sd.doc);
                         System.out.printf("#%d  score=%.4f  file=%s  path=%s%n",
                                 i + 1, sd.score, d.get("nomefile"), d.get("path"));
@@ -223,7 +209,7 @@ public class Main {
             this.contenAnalyzer = Indexer.buildContenutoAnalyzer();
         }
 
-        /** wrapper del risultato per sapere quale indice ha risposto e recuperare i Document senza API deprecate */
+        /** wrapper del risultato per sapere quale indice ha risposto e recuperare i Document */
         public static final class Result {
             public final TopDocs hits;
             private final IndexSearcher origin; // chi ha eseguito la query (nome o contenuto)
@@ -234,7 +220,6 @@ public class Main {
             }
 
             public Document doc(int docId) throws IOException {
-                // ✅ niente IndexSearcher.doc(int) deprecato
                 return origin.storedFields().document(docId);
             }
         }
@@ -274,7 +259,6 @@ public class Main {
         public void close() throws Exception {
             readerNome.close();
             readerCont.close();
-            // analyzer: nessuna risorsa nativa da chiudere
         }
     }
 }
